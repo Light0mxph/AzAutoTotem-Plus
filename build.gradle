@@ -2,7 +2,7 @@ plugins {
     id 'fabric-loom' version '1.7.4'
 }
 
-version = "0.9.0"
+version = "1.0.0"
 group = "com.azautotem"
 
 repositories {
@@ -40,5 +40,5 @@ processResources {
 
 // El jefe final: Forzar a remapJar a usar tu nombre exacto
 tasks.named('remapJar') {
-    archiveFileName = "AzAutoTotem+ v0.9.0.jar"
+    archiveFileName = "AzAutoTotem+ v1.0.0.jar"
 }
