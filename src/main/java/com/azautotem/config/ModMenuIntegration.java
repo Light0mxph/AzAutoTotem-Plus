@@ -15,63 +15,43 @@ public class ModMenuIntegration implements ModMenuApi {
             AzAutoTotemConfig cfg = AzAutoTotemConfig.load();
             ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(Text.literal("Aztrix Prime Studio - AzAutoTotem+").formatted(Formatting.AQUA, Formatting.BOLD))
+                .setTitle(Text.literal("AzAutoTotem+ Control Center").formatted(Formatting.GOLD, Formatting.BOLD))
                 .setSavingRunnable(() -> AzAutoTotemConfig.save(cfg));
 
             ConfigEntryBuilder eb = builder.entryBuilder();
 
-            // --- ⚙️ GENERAL ---
-            ConfigCategory general = builder.getOrCreateCategory(Text.literal("⚙️ General"));
-            general.addEntry(eb.startBooleanToggle(Text.literal("Mod Activado (Master Switch)"), cfg.enabled)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Apaga o enciende TODO el mod (Auto-Totem, Tools, etc)."))
-                .setSaveConsumer(v -> cfg.enabled = v).build());
+            // --- ESTADO GLOBAL ---
+            ConfigCategory main = builder.getOrCreateCategory(Text.literal("Principal"));
+            main.addEntry(eb.startBooleanToggle(Text.literal("Activar Módulo"), cfg.enabled)
+                .setDefaultValue(true).setSaveConsumer(v -> cfg.enabled = v).build());
 
-            // --- 🛡️ SUPERVIVENCIA ---
-            ConfigCategory combat = builder.getOrCreateCategory(Text.literal("🛡️ Supervivencia"));
-            combat.addEntry(eb.startBooleanToggle(Text.literal("Auto-Tótem"), cfg.autoTotem)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Si se desactiva, el mod no te pondrá tótems en la mano."))
+            // --- SUPERVIVENCIA (PVP) ---
+            ConfigCategory pvp = builder.getOrCreateCategory(Text.literal("🛡️ Supervivencia"));
+            pvp.addEntry(eb.startBooleanToggle(Text.literal("Auto-Tótem Inteligente"), cfg.autoTotem)
+                .setTooltip(Text.literal("Equipa tótems del inventario principal a la mano secundaria."))
                 .setSaveConsumer(v -> cfg.autoTotem = v).build());
 
-            combat.addEntry(eb.startBooleanToggle(Text.literal("Auto-Escudo Backup"), cfg.autoShieldBackup)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Equipa un escudo automáticamente si no hay tótems."))
-                .setSaveConsumer(v -> cfg.autoShieldBackup = v).build());
+            pvp.addEntry(eb.startIntSlider(Text.literal("Velocidad de Intercambio"), cfg.swapSpeed, 1, 5)
+                .setTooltip(Text.literal("1 = Instantáneo (Riesgo de Desync), 5 = Lento (Seguro)."))
+                .setSaveConsumer(v -> cfg.swapSpeed = v).build());
 
-            combat.addEntry(eb.startFloatField(Text.literal("Umbral de Vida"), cfg.totemHealthThreshold)
-                .setDefaultValue(18.0f).setMin(0.0f).setMax(20.0f)
-                .setTooltip(Text.literal("Punto de salud donde el mod actúa (20 = Siempre activo)."))
+            pvp.addEntry(eb.startFloatField(Text.literal("Salud de Activación"), cfg.totemHealthThreshold)
+                .setTooltip(Text.literal("Se activa cuando tu vida baja de este valor."))
                 .setSaveConsumer(v -> cfg.totemHealthThreshold = v).build());
 
-            // --- ⛏️ HERRAMIENTAS ---
-            ConfigCategory tools = builder.getOrCreateCategory(Text.literal("⛏️ Herramientas"));
-            tools.addEntry(eb.startBooleanToggle(Text.literal("Auto-Tool (Bloques)"), cfg.switchOnBlock)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Cambia al pico/hacha óptimo al mirar un bloque."))
+            // --- RENDIMIENTO (MINERÍA) ---
+            ConfigCategory utility = builder.getOrCreateCategory(Text.literal("⛏️ Utilidad"));
+            utility.addEntry(eb.startBooleanToggle(Text.literal("Auto-Tool Automático"), cfg.switchOnBlock)
                 .setSaveConsumer(v -> cfg.switchOnBlock = v).build());
-                
-            tools.addEntry(eb.startBooleanToggle(Text.literal("Auto-Regresar Slot"), cfg.autoRevert)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Vuelve al slot original después de picar un bloque."))
-                .setSaveConsumer(v -> cfg.autoRevert = v).build());
-                
-            tools.addEntry(eb.startIntSlider(Text.literal("Retraso de Regreso (Ticks)"), cfg.revertDelayTicks, 1, 40)
-                .setDefaultValue(5)
-                .setTooltip(Text.literal("Tiempo de espera antes de devolver la herramienta (20 ticks = 1s)."))
+            
+            utility.addEntry(eb.startIntSlider(Text.literal("Retraso de Regreso"), cfg.revertDelayTicks, 1, 10)
                 .setSaveConsumer(v -> cfg.revertDelayTicks = v).build());
 
-            // --- 👻 GHOST PROTOCOL ---
-            ConfigCategory ghost = builder.getOrCreateCategory(Text.literal("👻 Ghost Protocol"));
-            ghost.addEntry(eb.startBooleanToggle(Text.literal("Modo Sigilo"), cfg.stealthMode)
-                .setDefaultValue(true)
-                .setTooltip(Text.literal("Añade latencia aleatoria para evadir detección Anti-Cheat."))
+            // --- SEGURIDAD ---
+            ConfigCategory safety = builder.getOrCreateCategory(Text.literal("👻 Ghost Protocol"));
+            safety.addEntry(eb.startBooleanToggle(Text.literal("Modo Indetectable"), cfg.stealthMode)
+                .setTooltip(Text.literal("Simula latencia humana para evitar Bans."))
                 .setSaveConsumer(v -> cfg.stealthMode = v).build());
-                
-            ghost.addEntry(eb.startIntSlider(Text.literal("Máximo Jitter (Ticks)"), cfg.maxJitterTicks, 0, 10)
-                .setDefaultValue(2)
-                .setTooltip(Text.literal("Nivel de aleatoriedad en el cambio de slots."))
-                .setSaveConsumer(v -> cfg.maxJitterTicks = v).build());
 
             return builder.build();
         };
