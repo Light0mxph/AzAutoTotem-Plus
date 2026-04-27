@@ -14,17 +14,14 @@ public class AzAutoTotemConfig {
 
     public boolean enabled = true;
     public boolean autoTotem = true;
-    public boolean autoShieldBackup = true; // NUEVO: Equipar escudo si no hay tótems
+    public boolean autoShieldBackup = true;
     public float totemHealthThreshold = 18.0f; 
     public boolean stealthMode = true;
     public int maxJitterTicks = 2;
-    public boolean searchFullInventory = true;
     public boolean autoRevert = true;
     public boolean switchOnBlock = true;
-    public boolean switchOnEntity = true;
     public int revertDelayTicks = 5;
     public List<String> blacklistedBlocks = List.of("minecraft:bedrock");
-    public List<String> blacklistedEntities = List.of("minecraft:villager");
 
     public static AzAutoTotemConfig load() {
         File f = PATH.toFile();
