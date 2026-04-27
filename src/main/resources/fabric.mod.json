@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "azautotem_plus",
+  "version": "1.0.0",
+  "name": "AzAutoTotem+",
+  "description": "El sistema definitivo de AutoTool y AutoWeapon con Ghost Protocol. Desarrollado por Aztrix Prime Studio.",
+  "authors": ["DiegoCpsx7z", "Aztrix Prime Studio"],
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.azautotem.AzAutoTotemClient"],
+    "modmenu": ["com.azautotem.config.ModMenuIntegration"]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": ">=1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "accessWidener": "azautotem_plus.accesswidener"
+}
